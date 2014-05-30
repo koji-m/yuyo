@@ -110,9 +110,9 @@ func main() {
 	m := yuyocore.Init()
 
 	exp := `(define (fib n)
-          (if (< n 2)
-              n
-              (+ (fib (- n 2)) (fib (- n 1)))))`
+              (if (< n 2)
+                  n
+                  (+ (fib (- n 2)) (fib (- n 1)))))`
 	res, done := yuyocore.ReadEval(exp, m)
 	if !done {
 		return
