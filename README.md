@@ -2,7 +2,7 @@ yuyo
 ===============
 
 Yuyo is a implementation of Programing Language Scheme aiming at
-being incorporated into and used in Go.
+being used in Go.
 
 Also it is easy to use and works well as stand-alone.
 
@@ -73,7 +73,24 @@ evaluates the Scheme expression `(let ((x 2) (y 3.14)) (+ x y))` and
 prints the result.
 
 ```go
-package mainimport (	"fmt"	"github.com/koji-m/yuyo/yuyocore")func main() {	var (		inum int64   = 2		fnum float64 = 3.14	)	res, err := yuyocore.Run("(let ((x #:i) (y #:f)) (+ x y))", inum, fnum)	if err != nil {		fmt.Println(err.Error())	}	fmt.Println("result is", res.(float64))}
+package main
+
+import (
+	"fmt"
+	"github.com/koji-m/yuyo/yuyocore"
+)
+
+func main() {
+	var (
+		inum int64   = 2
+		fnum float64 = 3.14
+	)
+	res, err := yuyocore.Run("(let ((x #:i) (y #:f)) (+ x y))", inum, fnum)
+	if err != nil {
+		fmt.Println(err.Error())
+	}
+	fmt.Println("result is", res.(float64))
+}
 ```
 
 Other than the method described above (one shot evaluation), you can
@@ -81,7 +98,34 @@ evaluate expressions continually like following. In this case, the
 status, environment etc., is preserved until the VM object (the value of m in the following case) is abondoned.
  
 ```go
-package mainimport (	"fmt"	"github.com/koji-m/yuyo/yuyocore")func main() {	m := yuyocore.Init()	exp := `(define (fib n)          (if (< n 2)              n              (+ (fib (- n 2)) (fib (- n 1)))))`	res, done := yuyocore.ReadEval(exp, m)	if !done {		return	}	fmt.Println(yuyocore.ExtRepr(res)) //print #<closure> (value of define syntax)	exp = "(fib 30)"	res, done = yuyocore.ReadEval(exp, m)	if !done {		return	}	fmt.Println(yuyocore.IntnumVal(res)) //print 832040 (value of 30th fibonacci number)}
+package main
+
+import (
+	"fmt"
+	"github.com/koji-m/yuyo/yuyocore"
+)
+
+func main() {
+
+	m := yuyocore.Init()
+
+	exp := `(define (fib n)
+          (if (< n 2)
+              n
+              (+ (fib (- n 2)) (fib (- n 1)))))`
+	res, done := yuyocore.ReadEval(exp, m)
+	if !done {
+		return
+	}
+	fmt.Println(yuyocore.ExtRepr(res)) //print #<closure> (value of define syntax)
+
+	exp = "(fib 30)"
+	res, done = yuyocore.ReadEval(exp, m)
+	if !done {
+		return
+	}
+	fmt.Println(yuyocore.IntnumVal(res)) //print 832040 (value of 30th fibonacci number)
+}
 ```
 
 Development
@@ -93,7 +137,7 @@ at this stage.
 I intend to gradually implement the features in future.
 
 #####supporting syntaxes
-quote quasiquote( ` ) lambda if set! define cond case and or  
+quote( ' ) quasiquote( ` ) lambda if set! define cond case and or  
 let let* letrec begin do
 
 #####supporting procedures
